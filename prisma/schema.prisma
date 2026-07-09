@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id		String		@id @default(cuid())
+  googleId	String		@unique @map("google_id")
+  email		String		@unique
+  name		String
+  image		String
+
+  collection	UserCollection[]
+
+  @@map("users")
+}
+
+model Sku {
+  id		String		@id @default(cuid())
+  sku		String		@unique
+  name		String
+  image		String
+
+  collection	UserCollection[]
+
+  @@map("skus")
+}
+
+model UserCollection {
+  id		String		@id @default(cuid())
+  userId	String		@map("user_id")
+  user		User		@relation(fields: [userId], references: [id], onDelete: Cascade)
+  skuId		String		@map("sku_id")
+  sku		Sku		@relation(fields: [skuId], references: [id], onDelete: Cascade)
+  dateAcquired	DateTime	@default(now()) @map("date_acquired")
+  isWishlist	Boolean		@default(false) @map("is_wishlist")
+
+  // Ensures there is one unique SKU for a user
+  @@unique([userId, skuId])
+  // maps the model to "user_collection" table  in Postgres
+  @@map("user_collection")
+}
