@@ -1,65 +1,81 @@
-import Image from "next/image";
+import { signIn, signOut, auth } from "@/auth";
+import CollectionList from "@/app/component/CollectionList";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+export default async function Home() {
+  const session = await auth();
+
+  if (!session) {
+    return (
+      <main className="min-h-screen grid grid-cols-[1fr_auto_1fr] items-center gap-6 px-8">
+        {/* Left images */}
+        <div className="hidden sm:flex flex-col items-end gap-8">
+          <img src="https://antavo.s3.eu-west-1.amazonaws.com/brands/3030/media/1770297959-wqVXt.jpeg" alt="" className="w-40 lg:w-52 rotate-[-8deg] opacity-80 rounded-xl shadow-md" />
+          <img src="https://antavo.s3.eu-west-1.amazonaws.com/brands/3030/media/1770116485-usoYN.png" alt="" className="w-36 lg:w-44 rotate-[6deg] opacity-80 rounded-xl shadow-md" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Sign-in content */}
+        <div className="relative h-full flex items-center justify-center mx-12 bg-[#FBF6EF] shadow-md">
+          <div className="absolute left-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
+          <div className="absolute right-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
+          <div
+            className="h-full flex flex-col text-center justify-center py-12 px-8 mx-4 shadow-md"
+            style={{
+              backgroundColor: "#F5EBE0",
+              backgroundImage: "repeating-conic-gradient(from 45deg, #d4a98135 0% 25%, transparent 25% 50%)",
+              backgroundSize: "69px 69px",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <img className="mx-auto" src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/images/stencil/250x100/jellycat-logo-250x100_1713397226__60866.original.png" alt="Jellycat Logo" />
+            <h1 className="font-[family-name:var(--font-display)] text-6xl sm:text-7xl font-bold text-[#4A3B2E] mb-1">
+              Jellycat Journeys
+            </h1>
+            <p className="text-[#4A3B2E]/75 mb-8">Show off your collection and find new favorites!</p>
+            <form action={async () => { "use server"; await signIn("google"); }}>
+              <button
+                type="submit"
+                className="text-sm px-6 py-3 rounded-full border-2 border-[#4A3B2E]/75 bg-[#FFFFFF] text-[#4A3B2E]/90 hover:bg-[#8B6F52]/90 transition"
+              >
+                Sign in with Google
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Right images */}
+        <div className="hidden sm:flex flex-col items-start">
+          <img src="https://antavo.s3.eu-west-1.amazonaws.com/brands/3030/media/1782980322-xzIUr.jpeg" alt="" className="w-40 lg:w-52 rotate-[8deg] opacity-80 rounded-xl shadow-md" />
+          <img src="https://antavo.s3.eu-west-1.amazonaws.com/brands/3030/media/1778858040-CVG0M.png" alt="" className="w-36 lg:w-44 mt-8 rotate-[-6deg] opacity-80 rounded-xl shadow-md" />
         </div>
       </main>
-    </div>
+    );
+  }
+
+  return (
+    <main>
+      <div className="w-full flex items-center justify-between bg-[#FFFFFF] border border-[#4A3B2E]/20 shadow-md px-6 py-6">
+        <div>
+          <div className="flex items-center gap-1">
+            <img src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/stencil/1b485be0-57bd-013f-cfb2-7a11a811054c/e/833c2470-4c9c-013f-1dfc-1ee65f33f15f/img/jellycat-account.svg" alt="Jellycat Logo" />
+
+            <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold text-[#4A3B2E]">
+              Jellycat Journeys
+            </h1>
+          </div>
+          <p className="text-sm text-[#4A3B2E]/60 mt-1">Your personal collection of Jellycat adventures.</p>
+        </div>
+        <form className="flex flex-col items-end" action={async () => { "use server"; await signOut(); }}>
+          <button
+            type="submit"
+            className="text-sm text-[#4A3B2E] px-4 py-2 rounded-full border border-[#4A3B2E]/20 hover:bg-[#4A3B2E]/5 transition"
+          >
+            Sign out
+          </button>
+          <p className="text-sm text-[#4A3B2E]/60 mt-2">Signed in as {session.user?.email}</p>
+        </form>
+      </div>
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        <CollectionList />
+      </div>
+    </main>
   );
 }

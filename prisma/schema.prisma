@@ -45,6 +45,7 @@ model UserCollection {
   sku		Sku		@relation(fields: [skuId], references: [id], onDelete: Cascade)
   dateAcquired	DateTime	@default(now()) @map("date_acquired")
   isWishlist	Boolean		@default(false) @map("is_wishlist")
+  quantity  Int  @default(1)
 
   // Ensures there is one unique SKU for a user
   @@unique([userId, skuId])
