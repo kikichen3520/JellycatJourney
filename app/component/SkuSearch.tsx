@@ -48,7 +48,7 @@ export default function SkuSearch({ onAdd }: { onAdd?: () => void }) {
       )}
 
       {!loading && results.length > 0 && (
-        <ul className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <ul className="mt-3 grid grid-cols-1 min-[480px]:grid-cols-2 sm:grid-cols-3 gap-4">
           {results.map((sku) => (
             <li
               key={sku.id}
