@@ -81,7 +81,7 @@ export default function CollectionList() {
                     <h2 className="font-[family-name:var(--font-display)] bg-[#D9B98C] rounded-t-2xl text-lg font-bold text-[#4A3B2E]/70 mb-4 px-6 pt-6 pb-4">
                         Your Collection
                     </h2>
-                    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-5 px-6 py-4">
+                    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-5 px-6 py-4 min-w-0">
                         {owning.map((item) => (
                             <CollectionCard key={item.id} item={item} deleteItem={deleteItem} refreshCollection={fetchCollection} />
                         ))}
@@ -96,7 +96,7 @@ export default function CollectionList() {
                     <h2 className="font-[family-name:var(--font-display)] bg-[#D9B98C]/50 rounded-t-2xl text-lg font-bold text-[#4A3B2E]/70 mb-4 px-6 pt-6 pb-4">
                         Wishlist
                     </h2>
-                    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-5 px-6 py-4">
+                    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-5 px-6 py-4 min-w-0">
                         {wishlist.map((item) => (
                             <CollectionCard key={item.id} item={item} deleteItem={deleteItem} refreshCollection={fetchCollection} />
                         ))}

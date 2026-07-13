@@ -6,7 +6,7 @@ export default async function Home() {
 
   if (!session) {
     return (
-      <main className="min-h-screen grid grid-cols-[1fr_auto_1fr] items-center gap-6 px-8">
+      <main className="min-h-screen grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-6 px-8">
         {/* Left images */}
         <div className="hidden sm:flex flex-col items-end gap-8">
           <img src="https://antavo.s3.eu-west-1.amazonaws.com/brands/3030/media/1770297959-wqVXt.jpeg" alt="" className="w-40 lg:w-52 rotate-[-8deg] opacity-80 rounded-xl shadow-md" />
@@ -14,31 +14,27 @@ export default async function Home() {
         </div>
 
         {/* Sign-in content */}
-        <div className="relative h-full flex items-center justify-center mx-12 bg-[#FBF6EF] shadow-md">
+        <div className="relative flex flex-col items-center justify-center text-center py-12 px-6 sm:mx-12 bg-[#FBF6EF] shadow-md border border-[#4A3B2E]/20 rounded-3xl"
+          style={{
+            backgroundImage: "repeating-conic-gradient(from 45deg, #d4a98135 0% 25%, transparent 25% 50%)",
+            backgroundSize: "69px 69px",
+          }}
+        >
           <div className="absolute left-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
           <div className="absolute right-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
-          <div
-            className="h-full flex flex-col text-center justify-center py-12 px-8 mx-4 shadow-md"
-            style={{
-              backgroundColor: "#F5EBE0",
-              backgroundImage: "repeating-conic-gradient(from 45deg, #d4a98135 0% 25%, transparent 25% 50%)",
-              backgroundSize: "69px 69px",
-            }}
-          >
-            <img className="mx-auto" src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/images/stencil/250x100/jellycat-logo-250x100_1713397226__60866.original.png" alt="Jellycat Logo" />
-            <h1 className="font-[family-name:var(--font-display)] text-6xl sm:text-7xl font-bold text-[#4A3B2E] mb-1">
-              Jellycat Journeys
-            </h1>
-            <p className="text-[#4A3B2E]/75 mb-8">Show off your collection and find new favorites!</p>
-            <form action={async () => { "use server"; await signIn("google"); }}>
-              <button
-                type="submit"
-                className="text-sm px-6 py-3 rounded-full border-2 border-[#4A3B2E]/75 bg-[#FFFFFF] text-[#4A3B2E]/90 hover:bg-[#8B6F52]/90 transition"
-              >
-                Sign in with Google
-              </button>
-            </form>
-          </div>
+          <img className="mx-auto mb-4" src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/stencil/1b485be0-57bd-013f-cfb2-7a11a811054c/e/833c2470-4c9c-013f-1dfc-1ee65f33f15f/img/jellycat-account.svg" alt="Jellycat Logo" />
+          <h1 className="font-[family-name:var(--font-display)] text-6xl sm:text-7xl font-bold text-[#4A3B2E] mb-1">
+            Jellycat Journeys
+          </h1>
+          <p className="text-[#4A3B2E]/75 mb-8">Show off your collection and find new favorites!</p>
+          <form action={async () => { "use server"; await signIn("google"); }}>
+            <button
+              type="submit"
+              className="text-sm px-6 py-3 rounded-full border-2 border-[#4A3B2E]/75 bg-[#FFFFFF] text-[#4A3B2E]/90 hover:bg-[#8B6F52]/90 transition"
+            >
+              Sign in with Google
+            </button>
+          </form>
         </div>
 
         {/* Right images */}
@@ -52,7 +48,7 @@ export default async function Home() {
 
   return (
     <main>
-      <div className="w-full flex items-center justify-between bg-[#FFFFFF] border border-[#4A3B2E]/20 shadow-md px-6 py-6">
+      <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-[#FFFFFF] border border-[#4A3B2E]/20 shadow-md px-6 py-6">
         <div>
           <div className="flex items-center gap-1">
             <img src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/stencil/1b485be0-57bd-013f-cfb2-7a11a811054c/e/833c2470-4c9c-013f-1dfc-1ee65f33f15f/img/jellycat-account.svg" alt="Jellycat Logo" />
