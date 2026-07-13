@@ -19,14 +19,12 @@ export async function GET(request: NextRequest) {
     const ownedSkuIds = new Set(owned.map((item) => item.skuId));
 
     let matchingSkus: any[] = []
-    if (search != "") {
-        matchingSkus = await prisma.sku.findMany({
-            where: search
-                ? { name: { contains: search, mode: "insensitive" } }
-                : undefined,
-            orderBy: { name: "asc" },
-        });
-    }
+    matchingSkus = await prisma.sku.findMany({
+        where: search
+            ? { name: { contains: search, mode: "insensitive" } }
+            : undefined,
+        orderBy: { name: "asc" },
+    });
 
     return NextResponse.json(matchingSkus.filter((sku) => !ownedSkuIds.has(sku.id)));
 }

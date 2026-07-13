@@ -43,7 +43,7 @@ export default function SkuSearch({ onAdd }: { onAdd?: () => void }) {
         <p className="text-sm text-[#4A3B2E]/40 mt-2">Searching...</p>
       )}
 
-      {!loading && query && results.length === 0 && (
+      {!loading && results.length === 0 && (
         <p className="text-sm text-[#4A3B2E]/40 mt-2">No plushies found.</p>
       )}
 
