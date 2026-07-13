@@ -22,7 +22,7 @@ export default async function Home() {
         >
           <div className="absolute left-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
           <div className="absolute right-2 top-1 bottom-1 w-0.5" style={{ background: "repeating-linear-gradient(to bottom, #C4956A66 0px, #C4956A66 8px, transparent 8px, transparent 16px)" }} />
-          <img className="mx-auto mb-4" src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/stencil/1b485be0-57bd-013f-cfb2-7a11a811054c/e/833c2470-4c9c-013f-1dfc-1ee65f33f15f/img/jellycat-account.svg" alt="Jellycat Logo" />
+          <img className="mx-auto mb-4 w-20 sm:w-28 lg:w-30" src="https://cdn11.bigcommerce.com/s-23s5gfmhr7/stencil/1b485be0-57bd-013f-cfb2-7a11a811054c/e/833c2470-4c9c-013f-1dfc-1ee65f33f15f/img/jellycat-account.svg" alt="Jellycat Logo" />
           <h1 className="font-[family-name:var(--font-display)] text-6xl sm:text-7xl font-bold text-[#4A3B2E] mb-1">
             Jellycat Journeys
           </h1>
