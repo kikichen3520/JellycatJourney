@@ -59,7 +59,7 @@ export default async function Home() {
           </div>
           <p className="text-sm text-[#4A3B2E]/60 mt-1">Your personal collection of Jellycat adventures.</p>
         </div>
-        <form className="flex flex-col items-end" action={async () => { "use server"; await signOut(); }}>
+        <form className="flex flex-col items-start sm:items-end" action={async () => { "use server"; await signOut(); }}>
           <button
             type="submit"
             className="text-sm text-[#4A3B2E] px-4 py-2 rounded-full border border-[#4A3B2E]/20 hover:bg-[#4A3B2E]/5 transition"
