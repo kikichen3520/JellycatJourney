@@ -46,6 +46,7 @@ model UserCollection {
   dateAcquired	DateTime	@default(now()) @map("date_acquired")
   isWishlist	Boolean		@default(false) @map("is_wishlist")
   quantity  Int  @default(1)
+  customImage String?
 
   // Ensures there is one unique SKU for a user
   @@unique([userId, skuId])

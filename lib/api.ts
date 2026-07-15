@@ -11,3 +11,10 @@ export const updateWishlistStatus = (id: string, isWishlist: boolean, quantity?:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, isWishlist, quantity }),
     });
+
+export const uploadCustomImage = (skuId: string, customImage: string) =>
+    fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skuId, customImage }),
+    });

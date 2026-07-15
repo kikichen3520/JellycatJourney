@@ -1,4 +1,5 @@
 import { Baloo_2, Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const display = Baloo_2({
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       >
         {children}
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
