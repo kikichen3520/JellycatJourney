@@ -28,6 +28,14 @@ export async function POST(request: Request) {
     }
 
     // Upload the image to Cloudinary
+    const collectionItem = await prisma.userCollection.findUnique({
+        where: { userId_skuId: { userId, skuId: data.skuId } },
+    });
+
+    if (!collectionItem) {
+        return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    }
+
     try {
         const uploadResult = await cloudinary.uploader.upload(data.customImage, {
             folder: "jellycat_custom_images",
@@ -35,15 +43,12 @@ export async function POST(request: Request) {
             overwrite: true,
         });
 
-        // Update the custom image URL for the specified SKU in the user's collection
-        const newItem = await prisma.userCollection.update({
+        const updated = await prisma.userCollection.update({
             where: { userId_skuId: { userId, skuId: data.skuId } },
-            data: {
-                customImage: uploadResult.secure_url, // Store the secure URL of the uploaded image
-            }
+            data: { customImage: uploadResult.secure_url },
         });
 
-        return NextResponse.json(newItem);
+        return NextResponse.json(updated);
     } catch (error) {
         console.error("Upload failed:", error);
         return NextResponse.json({ error: "Failed to upload image" }, { status: 500 });

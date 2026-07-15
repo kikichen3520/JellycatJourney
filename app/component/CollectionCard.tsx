@@ -11,28 +11,52 @@ type Props = {
     refreshCollection?: () => void;
 };
 
+const convertToJpeg = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) { URL.revokeObjectURL(url); reject(new Error("Canvas unavailable")); return; }
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL("image/jpeg", 0.92));
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Could not read image")); };
+        img.src = url;
+    });
+
 export default function CollectionCard({ item, deleteItem, refreshCollection }: Props) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = async () => {
-            setUploading(true);
-            try {
-                await uploadCustomImage(item.sku.id, reader.result as string);
-                refreshCollection?.();
-            } catch (error) {
-                toast.error("Failed to upload image. Please try again.");
-            } finally {
-                setUploading(false);
-                if (fileInputRef.current) fileInputRef.current.value = "";
-            }
-        };
-        reader.readAsDataURL(file);
+        setUploading(true);
+        try {
+            const jpeg = await convertToJpeg(file);
+            await uploadCustomImage(item.sku.id, jpeg);
+            refreshCollection?.();
+        } catch (err) {
+            console.error("Upload error:", err);
+            const isHeic = ["image/heic", "image/heif"].includes(file.type.toLowerCase()) ||
+                /\.heic$|\.heif$/i.test(file.name);
+            toast.error(
+                isHeic
+                    ? "HEIC images can't be processed on this browser. Please convert to JPEG first, or upload from Safari."
+                    : "Failed to upload image. Please try again."
+            );
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
     };
 
     return (
