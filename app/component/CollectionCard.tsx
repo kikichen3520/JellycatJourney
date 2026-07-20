@@ -11,21 +11,28 @@ type Props = {
     refreshCollection?: () => void;
 };
 
+const MAX_DIM = 1200;
+
 const convertToJpeg = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
         const img = new Image();
         const url = URL.createObjectURL(file);
         img.onload = () => {
+            let { naturalWidth: w, naturalHeight: h } = img;
+            if (w > MAX_DIM || h > MAX_DIM) {
+                if (w > h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+                else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+            }
             const canvas = document.createElement("canvas");
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
+            canvas.width = w;
+            canvas.height = h;
             const ctx = canvas.getContext("2d");
             if (!ctx) { URL.revokeObjectURL(url); reject(new Error("Canvas unavailable")); return; }
             ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
+            ctx.fillRect(0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
             URL.revokeObjectURL(url);
-            resolve(canvas.toDataURL("image/jpeg", 0.92));
+            resolve(canvas.toDataURL("image/jpeg", 0.88));
         };
         img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Could not read image")); };
         img.src = url;
@@ -42,8 +49,13 @@ export default function CollectionCard({ item, deleteItem, refreshCollection }: 
         setUploading(true);
         try {
             const jpeg = await convertToJpeg(file);
-            await uploadCustomImage(item.sku.id, jpeg);
+            const res = await uploadCustomImage(item.sku.id, jpeg);
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error((body as { error?: string }).error ?? `Upload failed (${res.status})`);
+            }
             refreshCollection?.();
+            toast.success("Image updated!");
         } catch (err) {
             console.error("Upload error:", err);
             const isHeic = ["image/heic", "image/heif"].includes(file.type.toLowerCase()) ||
@@ -51,7 +63,7 @@ export default function CollectionCard({ item, deleteItem, refreshCollection }: 
             toast.error(
                 isHeic
                     ? "HEIC images can't be processed on this browser. Please convert to JPEG first, or upload from Safari."
-                    : "Failed to upload image. Please try again."
+                    : err instanceof Error ? err.message : "Failed to upload image. Please try again."
             );
         } finally {
             setUploading(false);
@@ -95,7 +107,7 @@ export default function CollectionCard({ item, deleteItem, refreshCollection }: 
                 <div className="mt-auto pt-2 flex items-center gap-2">
                     <p className="text-xs text-[#4A3B2E]/50">Qty</p>
                     <select
-                        className="flex-1 border border-[#4A3B2E]/10 rounded-md py-1"
+                        className="flex-1 border border-[#4A3B2E]/10 rounded-md py-1 text-[#4A3B2E] bg-white"
                         value={item.quantity ?? 1}
                         onChange={(e) => {
                             const newQuantity = parseInt(e.target.value);
